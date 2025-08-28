@@ -1,7 +1,6 @@
 "use client"
 
 import { useState } from "react"
-import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
 import { Button } from "@/components/ui/button"
@@ -19,12 +18,13 @@ const formSchema = z.object({
   message: z.string().min(10, { message: "Message must be at least 10 characters" }),
 })
 
+type FormData = z.infer<typeof formSchema>
+
 export default function HelpContactForm() {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isSubmitted, setIsSubmitted] = useState(false)
 
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+  const form = useForm<FormData>({
     defaultValues: {
       name: "",
       email: "",
@@ -34,7 +34,7 @@ export default function HelpContactForm() {
     },
   })
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
+  function onSubmit(values: FormData) {
     setIsSubmitting(true)
 
     // Simulate API call
