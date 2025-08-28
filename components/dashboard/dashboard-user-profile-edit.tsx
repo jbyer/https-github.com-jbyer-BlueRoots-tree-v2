@@ -20,7 +20,7 @@ import { CalendarIcon, Upload, Eye, EyeOff, Shield, Lock, AlertCircle, CheckCirc
 import { format } from "date-fns"
 import { cn } from "@/lib/utils"
 
-export function DashboardUserProfileEdit() {
+export default function DashboardUserProfileEdit() {
   const [activeTab, setActiveTab] = useState("profile")
   const [dateOfBirth, setDateOfBirth] = useState<Date>()
   const [incorporationDate, setIncorporationDate] = useState<Date>()
