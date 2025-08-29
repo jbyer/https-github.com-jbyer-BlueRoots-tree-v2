@@ -8,7 +8,9 @@ export default function CreateCampaignPage() {
         <p className="text-gray-600 mt-2">Start your political fundraising campaign</p>
       </div>
 
-      <DashboardCampaignCreateForm />
+      <div className="mb-[200px]">
+        <DashboardCampaignCreateForm />
+      </div>
     </div>
   )
 }

@@ -2,95 +2,111 @@
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import {
-  BarChart,
+  Area,
+  AreaChart,
   Bar,
+  BarChart,
+  Line,
+  LineChart,
+  Pie,
+  PieChart,
+  Cell,
+  ResponsiveContainer,
+  Tooltip,
   XAxis,
   YAxis,
   CartesianGrid,
-  Tooltip,
-  ResponsiveContainer,
-  LineChart,
-  Line,
-  PieChart,
-  Pie,
-  Cell,
-  AreaChart,
-  Area,
+  Legend,
 } from "recharts"
 
-export function ReportsCharts() {
+export default function ReportsCharts() {
+  // Monthly donations trend data
   const monthlyData = [
-    { month: "Jan", donations: 12500, donors: 89, campaigns: 3 },
-    { month: "Feb", donations: 18900, donors: 134, campaigns: 4 },
-    { month: "Mar", donations: 25600, donors: 178, campaigns: 5 },
-    { month: "Apr", donations: 31200, donors: 223, campaigns: 6 },
-    { month: "May", donations: 28800, donors: 198, campaigns: 7 },
-    { month: "Jun", donations: 35400, donors: 267, campaigns: 8 },
+    { month: "Jan", donations: 12500, donors: 89, avgDonation: 140 },
+    { month: "Feb", donations: 18200, donors: 124, avgDonation: 147 },
+    { month: "Mar", donations: 22800, donors: 156, avgDonation: 146 },
+    { month: "Apr", donations: 28500, donors: 189, avgDonation: 151 },
+    { month: "May", donations: 35200, donors: 234, avgDonation: 150 },
+    { month: "Jun", donations: 41800, donors: 278, avgDonation: 150 },
   ]
 
+  // Category distribution data
   const categoryData = [
-    { name: "Education", value: 45000, color: "#3b82f6" },
-    { name: "Healthcare", value: 32000, color: "#10b981" },
-    { name: "Environment", value: 18500, color: "#f59e0b" },
-    { name: "Sports", value: 8900, color: "#ef4444" },
-    { name: "Community", value: 15600, color: "#8b5cf6" },
+    { name: "Education", value: 85000, color: "#8B5CF6" },
+    { name: "Healthcare", value: 50750, color: "#EF4444" },
+    { name: "Arts", value: 18500, color: "#EC4899" },
+    { name: "Environment", value: 12920, color: "#10B981" },
+    { name: "Community", value: 8250, color: "#F59E0B" },
   ]
 
-  const donorRetentionData = [
-    { month: "Jan", newDonors: 45, returningDonors: 23 },
-    { month: "Feb", newDonors: 67, returningDonors: 34 },
-    { month: "Mar", newDonors: 89, returningDonors: 45 },
-    { month: "Apr", newDonors: 78, returningDonors: 56 },
-    { month: "May", newDonors: 92, returningDonors: 67 },
-    { month: "Jun", newDonors: 105, returningDonors: 78 },
+  // Donor retention data
+  const retentionData = [
+    { month: "Jan", newDonors: 89, returningDonors: 0 },
+    { month: "Feb", newDonors: 98, returningDonors: 26 },
+    { month: "Mar", newDonors: 112, returningDonors: 44 },
+    { month: "Apr", newDonors: 134, returningDonors: 55 },
+    { month: "May", newDonors: 156, returningDonors: 78 },
+    { month: "Jun", newDonors: 178, returningDonors: 100 },
   ]
 
-  const campaignPerformanceData = [
-    { name: "Week 1", views: 1200, donations: 450 },
-    { name: "Week 2", views: 1800, donations: 680 },
-    { name: "Week 3", views: 2400, donations: 920 },
-    { name: "Week 4", views: 2100, donations: 780 },
-    { name: "Week 5", views: 2800, donations: 1100 },
-    { name: "Week 6", views: 3200, donations: 1350 },
+  // Campaign performance correlation
+  const performanceData = [
+    { name: "Education Reform", views: 12500, donations: 85000, conversionRate: 2.74 },
+    { name: "Health Center", views: 8900, donations: 42000, conversionRate: 2.12 },
+    { name: "Arts Program", views: 5600, donations: 18500, conversionRate: 2.79 },
+    { name: "Environmental", views: 3400, donations: 12920, conversionRate: 2.88 },
+    { name: "Senior Care", views: 2100, donations: 8750, conversionRate: 3.19 },
   ]
+
+  const CustomTooltip = ({ active, payload, label }: any) => {
+    if (active && payload && payload.length) {
+      return (
+        <div className="bg-white p-3 border rounded-lg shadow-lg">
+          <p className="font-medium">{label}</p>
+          {payload.map((entry: any, index: number) => (
+            <p key={index} style={{ color: entry.color }}>
+              {entry.name}: {entry.value.toLocaleString()}
+            </p>
+          ))}
+        </div>
+      )
+    }
+    return null
+  }
 
   return (
-    <div className="grid gap-4 md:grid-cols-2">
+    <div className="grid gap-6 md:grid-cols-2">
       {/* Monthly Donations Trend */}
       <Card className="col-span-2">
         <CardHeader>
           <CardTitle>Monthly Donations Trend</CardTitle>
-          <CardDescription>Total donations and donor count over the past 6 months</CardDescription>
+          <CardDescription>Donation amounts and donor count over the past 6 months</CardDescription>
         </CardHeader>
         <CardContent>
           <ResponsiveContainer width="100%" height={300}>
             <AreaChart data={monthlyData}>
               <CartesianGrid strokeDasharray="3 3" />
               <XAxis dataKey="month" />
-              <YAxis yAxisId="left" />
-              <YAxis yAxisId="right" orientation="right" />
-              <Tooltip
-                formatter={(value, name) => [
-                  name === "donations" ? `$${value.toLocaleString()}` : value,
-                  name === "donations" ? "Donations" : "Donors",
-                ]}
-              />
+              <YAxis />
+              <Tooltip content={<CustomTooltip />} />
+              <Legend />
               <Area
-                yAxisId="left"
                 type="monotone"
                 dataKey="donations"
                 stackId="1"
-                stroke="#3b82f6"
-                fill="#3b82f6"
+                stroke="#3B82F6"
+                fill="#3B82F6"
                 fillOpacity={0.6}
+                name="Donations ($)"
               />
-              <Line
-                yAxisId="right"
+              <Area
                 type="monotone"
                 dataKey="donors"
-                stroke="#10b981"
-                strokeWidth={3}
-                dot={{ fill: "#10b981", strokeWidth: 2, r: 4 }}
+                stackId="2"
+                stroke="#10B981"
+                fill="#10B981"
+                fillOpacity={0.6}
+                name="Donors"
               />
             </AreaChart>
           </ResponsiveContainer>
@@ -100,8 +116,8 @@ export function ReportsCharts() {
       {/* Category Distribution */}
       <Card>
         <CardHeader>
-          <CardTitle>Donations by Category</CardTitle>
-          <CardDescription>Distribution of funds across different campaign categories</CardDescription>
+          <CardTitle>Funds by Category</CardTitle>
+          <CardDescription>Distribution of raised funds across campaign categories</CardDescription>
         </CardHeader>
         <CardContent>
           <ResponsiveContainer width="100%" height={300}>
@@ -110,17 +126,15 @@ export function ReportsCharts() {
                 data={categoryData}
                 cx="50%"
                 cy="50%"
-                labelLine={false}
-                label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
                 outerRadius={80}
-                fill="#8884d8"
                 dataKey="value"
+                label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
               >
                 {categoryData.map((entry, index) => (
                   <Cell key={`cell-${index}`} fill={entry.color} />
                 ))}
               </Pie>
-              <Tooltip formatter={(value) => [`$${value.toLocaleString()}`, "Amount"]} />
+              <Tooltip formatter={(value: number) => [`$${value.toLocaleString()}`, "Amount"]} />
             </PieChart>
           </ResponsiveContainer>
         </CardContent>
@@ -130,58 +144,46 @@ export function ReportsCharts() {
       <Card>
         <CardHeader>
           <CardTitle>Donor Retention</CardTitle>
-          <CardDescription>New vs returning donors over time</CardDescription>
+          <CardDescription>New vs returning donors by month</CardDescription>
         </CardHeader>
         <CardContent>
           <ResponsiveContainer width="100%" height={300}>
-            <BarChart data={donorRetentionData}>
+            <BarChart data={retentionData}>
               <CartesianGrid strokeDasharray="3 3" />
               <XAxis dataKey="month" />
               <YAxis />
-              <Tooltip />
-              <Bar dataKey="newDonors" stackId="a" fill="#3b82f6" name="New Donors" />
-              <Bar dataKey="returningDonors" stackId="a" fill="#10b981" name="Returning Donors" />
+              <Tooltip content={<CustomTooltip />} />
+              <Legend />
+              <Bar dataKey="newDonors" fill="#3B82F6" name="New Donors" />
+              <Bar dataKey="returningDonors" fill="#10B981" name="Returning Donors" />
             </BarChart>
           </ResponsiveContainer>
         </CardContent>
       </Card>
 
-      {/* Campaign Performance */}
+      {/* Campaign Performance Correlation */}
       <Card className="col-span-2">
         <CardHeader>
           <CardTitle>Campaign Performance</CardTitle>
-          <CardDescription>Views vs donations correlation over recent weeks</CardDescription>
+          <CardDescription>Relationship between page views and donations by campaign</CardDescription>
         </CardHeader>
         <CardContent>
           <ResponsiveContainer width="100%" height={300}>
-            <LineChart data={campaignPerformanceData}>
+            <LineChart data={performanceData}>
               <CartesianGrid strokeDasharray="3 3" />
               <XAxis dataKey="name" />
               <YAxis yAxisId="left" />
               <YAxis yAxisId="right" orientation="right" />
-              <Tooltip
-                formatter={(value, name) => [
-                  name === "donations" ? `$${value.toLocaleString()}` : value.toLocaleString(),
-                  name === "donations" ? "Donations" : "Views",
-                ]}
-              />
+              <Tooltip content={<CustomTooltip />} />
+              <Legend />
+              <Bar yAxisId="left" dataKey="views" fill="#8884d8" name="Page Views" />
               <Line
                 yAxisId="right"
                 type="monotone"
-                dataKey="views"
-                stroke="#f59e0b"
-                strokeWidth={2}
-                dot={{ fill: "#f59e0b", strokeWidth: 2, r: 4 }}
-                name="views"
-              />
-              <Line
-                yAxisId="left"
-                type="monotone"
                 dataKey="donations"
-                stroke="#3b82f6"
-                strokeWidth={2}
-                dot={{ fill: "#3b82f6", strokeWidth: 2, r: 4 }}
-                name="donations"
+                stroke="#82ca9d"
+                strokeWidth={3}
+                name="Donations ($)"
               />
             </LineChart>
           </ResponsiveContainer>

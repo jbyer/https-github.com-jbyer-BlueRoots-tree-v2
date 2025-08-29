@@ -1,5 +1,5 @@
-import { DashboardUserProfileEdit } from "@/components/dashboard/dashboard-user-profile-edit"
+import { DashboardUserProfile } from "@/components/dashboard/dashboard-user-profile"
 
 export default function ProfilePage() {
-  return <DashboardUserProfileEdit />
+  return <DashboardUserProfile />
 }

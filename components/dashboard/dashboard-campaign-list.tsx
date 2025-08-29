@@ -44,7 +44,7 @@ const campaigns = [
 
 export function DashboardCampaignList() {
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 mb-12">
       <div className="flex justify-between items-center">
         <h2 className="text-2xl font-bold text-gray-900">Your Campaigns</h2>
         <Button asChild>
@@ -52,7 +52,7 @@ export function DashboardCampaignList() {
         </Button>
       </div>
 
-      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 pb-8">
         {campaigns.map((campaign) => {
           const progressPercentage = (campaign.raised / campaign.goal) * 100
 
